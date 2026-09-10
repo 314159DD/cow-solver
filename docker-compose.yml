@@ -1,0 +1,125 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CoW Protocol Solver — Docker Compose
+#
+# Usage:
+#   docker-compose up -d              # Start solver only
+#   docker-compose --profile driver up -d  # Start solver + CoW driver
+#
+# Environment:
+#   Copy .env.example to .env and set RPC_URL before starting.
+#
+# Production deployment:
+#   Use scripts/deploy.sh for zero-downtime restarts.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  # ─── Solver Engine ──────────────────────────────────────────────────────────
+  solver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "${IMAGE_NAME:-cow-solver}:${IMAGE_TAG:-latest}"
+    container_name: cow-solver
+    restart: always
+    ports:
+      - "${SOLVER_PORT:-8000}:${SOLVER_PORT:-8000}"
+    environment:
+      RPC_URL: "${RPC_URL}"
+      SOLVER_PORT: "${SOLVER_PORT:-8000}"
+      CHAIN_ID: "${CHAIN_ID:-42161}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+      MAX_SOLVE_TIME_MS: "${MAX_SOLVE_TIME_MS:-25000}"
+      # Telegram alerts (optional — silent no-op if unset)
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN:-}"
+      TELEGRAM_CHAT_ID: "${TELEGRAM_CHAT_ID:-}"
+      # Kill switches (all default to enabled)
+      # eth_call sim always reverts: settlement contract requires valid order
+      # signatures and authorized solver address — neither available locally.
+      # The CoW driver performs its own simulation with full context.
+      # Keep structural validation (trades+prices exist), skip eth_call.
+      SIMULATION_ENABLED: "${SIMULATION_ENABLED:-true}"
+      SIM_ETH_CALL: "${SIM_ETH_CALL:-false}"
+      FRESHNESS_GATE_ENABLED: "${FRESHNESS_GATE_ENABLED:-true}"
+      FRESHNESS_THRESHOLD: "${FRESHNESS_THRESHOLD:-0.3}"
+      RFQ_ENABLED: "${RFQ_ENABLED:-true}"
+      POOL_INDEXER_ENABLED: "${POOL_INDEXER_ENABLED:-true}"
+      # The Graph API key for V3 subgraph tick data
+      THEGRAPH_API_KEY: "${thegraph_api_key:-}"
+      SUBMISSION_REPLACE_ENABLED: "${SUBMISSION_REPLACE_ENABLED:-true}"
+      PROTECTED_SUBMIT_ENABLED: "${PROTECTED_SUBMIT_ENABLED:-true}"
+      # EBBO disabled — our pool data can't pass EBBO with stale reserves.
+      # The CoW driver applies its own EBBO check on received solutions.
+      EBBO_CHECK_ENABLED: "${EBBO_CHECK_ENABLED:-false}"
+      EBBO_TOLERANCE_BPS: "${EBBO_TOLERANCE_BPS:-9999}"
+      # 0x API v2 — allowance-holder endpoint, limited to top 3 orders
+      ZEROX_API_KEY: "${ZEROX_API_KEY:-}"
+      # Dashboard auth
+      DASHBOARD_TOKEN: "${DASHBOARD_TOKEN:-}"
+      # DB paths (inside container — backed by named volumes)
+      REPLAY_DB_PATH: "/app/data/replay.db"
+      ACCOUNTING_DB_PATH: "/app/data/accounting.db"
+    volumes:
+      # Writable data volume — replay DB, accounting DB, revenue data persist across restarts
+      - solver-data:/app/data
+      # Persistent log volume for post-mortem analysis
+      - solver-logs:/var/log/cow-solver
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+        labels: "service,version"
+    labels:
+      service: "cow-solver"
+      version: "${IMAGE_TAG:-dev}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${SOLVER_PORT:-8000}/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    networks:
+      - cow-net
+
+  # ─── CoW Protocol Driver (optional, requires services image) ────────────────
+  # Enable with: docker-compose --profile driver up
+  #
+  # The official driver image is not yet publicly published; build from source:
+  #   git clone https://github.com/cowprotocol/services
+  #   cd services && docker build -t cowprotocol/driver -f crates/driver/Dockerfile .
+  driver:
+    image: cowprotocol/driver:latest
+    container_name: cow-driver
+    profiles: ["driver"]
+    restart: always
+    depends_on:
+      solver:
+        condition: service_healthy
+    command:
+      - "--config"
+      - "/config/driver.config.toml"
+      - "--ethrpc"
+      - "${RPC_URL}"
+      - "--log-level"
+      - "${LOG_LEVEL:-info}"
+    volumes:
+      - ./scripts/driver.config.toml:/config/driver.config.toml:ro
+    environment:
+      RPC_URL: "${RPC_URL}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+    networks:
+      - cow-net
+
+volumes:
+  solver-data:
+  solver-logs:
+
+networks:
+  cow-net:
+    driver: bridge

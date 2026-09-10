@@ -1,0 +1,121 @@
+# Ethereum Mainnet (Chain ID 1) — CoW Protocol Solver Configuration
+
+[chain]
+id = 1
+name = "mainnet"
+
+[tokens]
+WETH  = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+USDC  = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+USDT  = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+DAI   = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+WBTC  = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
+stETH = "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+FRAX  = "0x853d955aCEf822Db058eb8505911ED77F175b99e"
+
+[dex.uniswap_v2]
+factory  = "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+router   = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
+fee_bps  = 30
+
+[dex.sushiswap]
+factory  = "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
+router   = "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
+fee_bps  = 30
+
+[dex.uniswap_v3]
+factory  = "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+router   = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+fee_tiers = [100, 500, 3000, 10000]
+
+[[dex.curve.pools]]
+name    = "3pool"
+address = "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"
+tokens  = ["DAI", "USDC", "USDT"]
+type    = "stable"
+amp     = 2000
+fee_bps = 4
+
+[[dex.curve.pools]]
+name    = "stETH/ETH"
+address = "0xDC24316b9AE028F1497c275EB9192a3Ea0f67022"
+tokens  = ["ETH", "stETH"]
+type    = "stable"
+amp     = 50
+fee_bps = 4
+
+[[dex.curve.pools]]
+name    = "FRAX/USDC"
+address = "0xDcEF968d416a41Cdac0ED8702fAC8128A64241A2"
+tokens  = ["FRAX", "USDC"]
+type    = "stable"
+amp     = 1500
+fee_bps = 4
+
+[[dex.curve.pools]]
+name    = "tricrypto2"
+address = "0xD51a44d3FaE010294C616388b506AcdA1BFAAE46"
+tokens  = ["USDT", "WBTC", "WETH"]
+type    = "crypto"
+amp     = 1707629
+fee_bps = 4
+
+[dex.balancer_v2]
+vault = "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+
+[[dex.balancer_v2.pools]]
+name    = "wstETH/WETH Stable"
+address = "0x32296969Ef14EB0c6d29669C550D4a0449130230"
+pool_id = "0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080"
+tokens  = ["stETH", "WETH"]
+type    = "stable"
+amp     = 50
+fee     = 0.0004
+
+[[dex.balancer_v2.pools]]
+name    = "DAI/USDC/USDT Stable"
+address = "0x79c58f70905F734641735BC61e45c19dD9Ad60bC"
+pool_id = "0x79c58f70905f734641735bc61e45c19dd9ad60bc0000000000000000000004e7"
+tokens  = ["DAI", "USDC", "USDT"]
+type    = "stable"
+amp     = 1000
+fee     = 0.0001
+
+[[dex.balancer_v2.pools]]
+name    = "WETH/WBTC 50/50"
+address = "0xA6F548DF93de924d73be7D25dC02554c46BD12d0"
+pool_id = "0xa6f548df93de924d73be7d25dc02554c46bd12d00002000000000000000000e0"
+tokens  = ["WETH", "WBTC"]
+type    = "weighted"
+weights = [0.5, 0.5]
+fee     = 0.003
+
+# Default pairs for pool discovery
+[[discovery_pairs]]
+token_a = "WETH"
+token_b = "USDC"
+
+[[discovery_pairs]]
+token_a = "WETH"
+token_b = "USDT"
+
+[[discovery_pairs]]
+token_a = "WETH"
+token_b = "DAI"
+
+[[discovery_pairs]]
+token_a = "WETH"
+token_b = "WBTC"
+
+[[discovery_pairs]]
+token_a = "USDC"
+token_b = "USDT"
+
+[[discovery_pairs]]
+token_a = "USDC"
+token_b = "DAI"
+
+[gas]
+settlement_overhead    = 100_000
+per_order              = 50_000
+l1_surcharge_enabled   = false

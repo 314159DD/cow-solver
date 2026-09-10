@@ -1,0 +1,30 @@
+[package]
+name = "benchmarks"
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+
+[lib]
+name = "benchmarks"
+path = "src/lib.rs"
+
+[[bench]]
+name = "solve_throughput"
+harness = false
+
+[[bench]]
+name = "route_quality"
+harness = false
+
+[[bench]]
+name = "pool_sync"
+harness = false
+
+[dependencies]
+solver-engine = { path = "../solver-engine" }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["async_tokio"] }
+tokio = { workspace = true }

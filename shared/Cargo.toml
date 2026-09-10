@@ -1,0 +1,15 @@
+[package]
+name = "shared"
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+
+[dependencies]
+tokio = { workspace = true }
+# alloy = { workspace = true }  # Enable when rustc >= 1.88 (serde_with transitive dep)
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }

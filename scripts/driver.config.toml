@@ -1,0 +1,21 @@
+# scripts/driver.config.toml
+#
+# CoW Protocol driver configuration for local solver testing.
+# Used with: cargo run -p driver -- --config scripts/driver.config.toml --ethrpc $RPC_URL
+#
+# Reference: https://docs.cow.fi/cow-protocol/tutorials/solvers/local_test
+
+[contracts]
+# CoW Protocol Settlement contract (same address on all EVM chains)
+gp_v2_settlement = "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
+
+[[solver]]
+# Display name for this solver instance in driver logs and competition
+name = "cow-solver"
+
+# Our local solver endpoint
+endpoint = "http://localhost:8000"
+
+# Account used to sign solutions (must have ETH for gas + BOND token stake)
+# Replace with your actual solver address when going to production
+account = "0x0000000000000000000000000000000000000001"

@@ -1,0 +1,45 @@
+{
+  "winning_score": "9500000000000000000",
+  "auction": {
+    "id": 1003,
+    "orders": [
+      {
+        "uid": "0x4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d0000000004",
+        "sellToken": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "buyToken": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+        "sellAmount": "3000000000000000000",
+        "buyAmount": "5500000",
+        "feeAmount": "0",
+        "kind": "sell",
+        "partiallyFillable": false
+      },
+      {
+        "uid": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e0000000005",
+        "sellToken": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "buyToken": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "sellAmount": "8000000000",
+        "buyAmount": "2100000000000000000",
+        "feeAmount": "0",
+        "kind": "sell",
+        "partiallyFillable": false
+      },
+      {
+        "uid": "0x6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f0000000006",
+        "sellToken": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+        "buyToken": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "sellAmount": "2000000",
+        "buyAmount": "1100000000000000000",
+        "feeAmount": "0",
+        "kind": "sell",
+        "partiallyFillable": false
+      }
+    ],
+    "prices": {
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "1000000000000000000",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": "266264879219137",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": "18200000000000000000"
+    },
+    "chainId": 1,
+    "block": 19500200
+  }
+}

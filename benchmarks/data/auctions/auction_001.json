@@ -1,0 +1,24 @@
+{
+  "winning_score": "1850000000000000000",
+  "auction": {
+    "id": 1001,
+    "orders": [
+      {
+        "uid": "0x1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a0000000001",
+        "sellToken": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "buyToken": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "sellAmount": "1000000000000000000",
+        "buyAmount": "3700000000",
+        "feeAmount": "0",
+        "kind": "sell",
+        "partiallyFillable": false
+      }
+    ],
+    "prices": {
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "1000000000000000000",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": "266264879219137"
+    },
+    "chainId": 1,
+    "block": 19500000
+  }
+}
